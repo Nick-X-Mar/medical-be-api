@@ -1,4 +1,4 @@
-import authenticate
+import jwt
 # from datetime import datetime, timedelta
 from functools import wraps
 from flask import Flask, request, jsonify, make_response
@@ -6,6 +6,9 @@ from config import config
 
 
 # decorator for verifying the JWT
+from endpoints.email import execute_get_user_by_email
+
+
 def token_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
@@ -15,19 +18,16 @@ def token_required(f):
             token = request.headers['x-access-token']
         # return 401 if token is not passed
         if not token:
-            return jsonify({'message': 'Token is missing !!'}), 401
-
+            return {'message': 'Token is missing !!'}, 401
         try:
             # decoding the payload to fetch the stored details
-            data = authenticate.decode(token, config.SECRET_KEY)
-            current_user = User.query \
-                .filter_by(public_id=data['public_id']) \
-                .first()
+            data = jwt.decode(token, config.JWT_SECRET, algorithms=[config.JWT_ALGORITHM])
+            user, status = execute_get_user_by_email(data.get('email'))
+            if status == 404 and user == "User not found.":
+                return {'message': "User not Found."}, 200
         except:
-            return jsonify({
-                'message': 'Token is invalid !!'
-            }), 401
+            return {'message': 'Token is invalid !!'}, 401
         # returns the current logged in users contex to the routes
-        return f(current_user, *args, **kwargs)
+        return f(*args, **kwargs)
 
     return decorated

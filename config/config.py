@@ -1,9 +1,11 @@
 from os import environ
 
 # JWT
-SECRET_KEY = 'your secret key'
+JWT_SECRET = 'secret'
+JWT_ALGORITHM = 'HS256'
+JWT_EXP_DELTA_SECONDS = 6000
 # App
-APP_ADDRESS = "192.168.1.6"
+APP_ADDRESS = "127.0.0.1"
 APP_PORT = 5000
 
 # MySql

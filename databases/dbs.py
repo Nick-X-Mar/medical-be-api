@@ -12,20 +12,20 @@ def connect_to_mysql():
         password=config.MYSQL_PASSWORD,
         database=config.MYSQL_DB
     )
-    # print("Connected to:", my_db.get_server_info())
-    # print(f"my_db: {my_db}")
+    print(f"Connection to: {my_db.server_host} is: {my_db.is_connected()}")
     return my_db
 
 
 def query_mysql(q):
     try:
         my_sql = connect_to_mysql()
-        cursor = my_sql.cursor(dictionary=True, buffered=True)
+        cursor = my_sql.cursor(dictionary=True)  # mysql.connector
         cursor.execute(q)
         results = cursor.fetchall()
+        my_sql.commit()
         cursor.close()
         my_sql.close()
-        return results
+        return results, 200
     except Exception as e:
-        print(f"Error: {e}, executing the sql query: {q}")
-        return 400
+        print(f"Error: {e} was returned while executing the following sql query: {q}")
+        return f"{e}", 400
