@@ -2,10 +2,7 @@ from flask import Flask
 from flask_restful import Api
 
 from authenticate.login import Login
-from endpoints.delete import DeleteUser
-from endpoints.update import UpdateUser
 from endpoints.users import Users
-from endpoints.email import Email
 from config import config
 
 

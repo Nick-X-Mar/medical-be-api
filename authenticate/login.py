@@ -1,7 +1,7 @@
 from flask import Flask, request, jsonify, make_response
 from config import config
 from datetime import datetime, timedelta
-from endpoints.email import execute_get_user_by_email
+from endpoints.users import execute_get_user_by_email
 import jwt
 from flask_restful import Resource
 

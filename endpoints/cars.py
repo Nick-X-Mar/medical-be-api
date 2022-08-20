@@ -37,13 +37,13 @@ def get_all_users():
     return results_list[0], 200
 
 
-def register_new_user(args):
-    title = args.get('title')
-    firstName = args.get('firstName')
-    lastName = args.get('lastName')
-    role = args.get('role')
-    email = args.get('email')
-    password = args.get('password')
+def register_new_car(args):
+    model = args.get('model')
+    brand = args.get('brand')
+    year = args.get('year')
+    khm = args.get('khm')
+    cc = args.get('cc')
+    hp = args.get('hp')
     # generate_password_hash(password)
     # check_password_hash(user.password, auth.get('password')
     # Todo: get buy email for check already exists
@@ -96,18 +96,15 @@ def update_user(args, body):
 
 
 def check_request_post(args):
-    title = args.get('title')
-    firstName = args.get('firstName')
-    lastName = args.get('lastName')
-    role = args.get('role')
-    email = args.get('email')
-    password = args.get('password')
+    model = args.get('model')
+    brand = args.get('brand')
+    year = args.get('year')
+    khm = args.get('khm')
+    cc = args.get('cc')
+    hp = args.get('hp')
 
-    if email is None and email == "":
-        return {"message": "Email was not given."}, 400
-
-    if password is None and password == "":
-        return {"message": "Password was not given."}, 400
+    if any(item is None for item in [model, brand, year, khm, cc, hp]):
+        return {'message': 'Please complete all required fields.'}, 400
 
     return "", 200
 
@@ -143,7 +140,7 @@ def check_request_put(args, body):
     return "", 200
 
 
-class Users(Resource):
+class Cars(Resource):
 
     # Get All Users
     @staticmethod
@@ -171,13 +168,13 @@ class Users(Resource):
         else:
             return {"message": msg}, status
 
-    # Add User
+    # Add Car
     @staticmethod
     def post():
         body = request.json
         msg, status = check_request_post(body)
         if status == 200:
-            return register_new_user(body)
+            return register_new_car(body)
         else:
             return msg, status
 

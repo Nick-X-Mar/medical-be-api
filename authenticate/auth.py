@@ -6,7 +6,7 @@ from config import config
 
 
 # decorator for verifying the JWT
-from endpoints.email import execute_get_user_by_email
+from endpoints import users
 
 
 def token_required(f):
@@ -22,7 +22,7 @@ def token_required(f):
         try:
             # decoding the payload to fetch the stored details
             data = jwt.decode(token, config.JWT_SECRET, algorithms=[config.JWT_ALGORITHM])
-            user, status = execute_get_user_by_email(data.get('email'))
+            user, status = users.execute_get_user_by_email(data.get('email'))
             if status == 404 and user == "User not found.":
                 return {'message': "User not Found."}, 200
         except:
