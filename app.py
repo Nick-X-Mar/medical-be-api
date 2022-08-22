@@ -32,6 +32,15 @@ api.add_resource(Users, root + '/users/email', endpoint='get_user_by_email', met
 # Get single User by Id
 api.add_resource(Users, root + '/users/member_id', endpoint='get_user_by_id', methods=['GET'])
 
+
+class StartingPage:
+    @staticmethod
+    def get():
+        return "Hello this is the new version!"
+
+
+api.add_resource(StartingPage, '/', endpoint='StartingPage', methods=['GET'])
+
 if __name__ == '__main__':
     print(f"Host:{config.APP_ADDRESS}, \nPort:{config.APP_PORT}")
     app.run(debug=False, host=config.APP_ADDRESS, port=config.APP_PORT)
